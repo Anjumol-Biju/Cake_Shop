@@ -1,0 +1,126 @@
+
+
+{% extends 'base.html' %}
+
+{% block main_block %}
+{% load static %}
+<style>
+    /* Style for the container of category links */
+.category-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Style for each individual category item */
+.category-item {
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* Style for the category link */
+.category-link {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+/* Hover effect for the category link */
+.category-link:hover {
+    color: #007bff;
+}
+
+</style>
+<!-- Product start -->
+        <div class="container-xxl bg-light my-6 py-6 pt-0">
+        <div class="container">
+           
+            <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px">
+               
+                <h1 class="display-6 mb-4"><em>Our Products</em></h1>
+
+                <h1 class="display-6 mb-4"><em>Explore The Categories Of Our Cakes</em></h1>
+            </div>
+            <br>
+            <br>
+                        <h5>All Cake Categories</h5>
+<!-- 
+                    <div>
+                        {%for cat in categories%}
+                          
+                          <div>
+                            
+                            <a href="{%url 'index'%}?category={{cat.name}}">{{cat.name}}</a>
+
+                          </div>
+                        {%endfor%}
+                    </div> -->
+                    <div class="category-list">
+                        {% for cat in categories %}
+                            <div class="category-item">
+                                <a class="category-link" href="{% url 'index' %}?category={{ cat.name }}">{{ cat.name }}</a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    
+            <br>
+
+
+            <div class="row g-4">
+                {%for p in data%}
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="product-item d-flex flex-column bg-white rounded overflow-hidden h-100">
+                        <div class="text-center p-4">
+                            <!-- <div class="d-inline-block border border-primary rounded-pill px-3 mb-3">Price ${{p.cake_object.price}}</div> -->
+                            <h3 class="mb-3">{{p.title}}</h3>
+                            <!-- <h3 class="mb-3">{{p.category_object}}</h3> -->
+                            <span>{{p.description}}</span>
+                        </div>
+                        <div class="position-relative mt-auto">
+                            <img class="" src="{{p.image.url}}" alt="" height="350px" width="100%">
+                            
+                            <div class="product-overlay">
+                                <a class="btn btn-lg-square btn-outline-light rounded-circle" href="{%url 'cake-detail' p.id%}"><i class="fa fa-eye text-primary"> More</i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              
+                {% endfor %}  
+            </div>
+        </div>
+    </div> 
+    <!-- Product End -->
+
+
+{%endblock%}
+
+
+
+
+
+    
+    <!-- <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+        <h1 class="display-6 mb-4"><em>Our Products</em></h1>
+        <h1 class="display-6 mb-4"><em>Explore The Categories Of Our Cakes</em></h1>
+    </div>
+    <div class="row g-4">
+        {% for p in data %}
+        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+            <div class="product-item d-flex flex-column bg-white rounded overflow-hidden h-100">
+                <div class="text-center p-4">
+                    <div class="d-inline-block border border-primary rounded-pill px-3 mb-3">{{p.price}}</div>
+                    <h3 class="mb-3">{{p.title}}</h3>
+                    <span>{{p.description}}</span>
+                </div>
+                <div class="position-relative mt-auto">
+                    <img class="img-fluid" src="{{p.image.url}}" alt="">
+                    <div class="product-overlay">
+                        <a class="btn btn-lg-square btn-outline-light rounded-circle" href="{%url 'cake-detail' p.id%}"><i class="fa fa-eye text-primary"></i></a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div> -->

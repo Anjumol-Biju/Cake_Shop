@@ -1,0 +1,63 @@
+@method_decorator([signin_required,never_cache],name="dispatch")
+class CheckOutView(View):
+    
+    def get (self,request,args,*kwargs):
+        
+        return render(request,"checkout.html")
+    
+    def post(self,request,args,*kwargs):
+        
+        email=request.POST.get("email")
+        phone=request.POST.get("phone")
+        address=request.POST.get("address")
+        
+        payment_method=request.POST.get("payment")
+        
+        
+        # print(email,phone,address)
+        # step 1 create an order instance
+        order_obj=Order.objects.create(
+            user_object=request.user,
+            delivery_address=address,
+            phone=phone,
+            email=email,
+            total=request.user.cart.basket_total,
+            
+            payment=payment_method,
+        )
+        # step 2 create order_item instance 
+        try:
+            basket_items=request.user.cart.cart_items
+            for bi in basket_items:
+                OrderItems.objects.create(
+                    order_object=order_obj,
+                    basket_item_object=bi
+                    
+                )
+                bi.is_order_placed=True
+                bi.save()
+                print("test block-1")
+        except:
+            order_obj.delete()
+            
+        #  update basket_item_object is_order_placed(True)    
+        finally:
+            
+            print("test block-2")
+            
+            print(payment_method)
+            print(order_obj)
+            
+            if payment_method=="online" and order_obj:
+                
+                print("test block-3")
+                
+                client = razorpay.Client(auth=(KEY_ID, KEY_SECRET))
+                
+                amount=int(order_obj.get_order_total)
+
+                data = { "amount": amount, "currency": "INR", "receipt": "order_rcptid_11" }
+                payment = client.order.create(data=data)
+                print("payment initiate",payment)
+            
+            return redirect("index")
